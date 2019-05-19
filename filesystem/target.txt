@@ -1,3 +1,1 @@
-"Hello" 
-echo
-Hello KuangKuangKuang
+hello KKK 

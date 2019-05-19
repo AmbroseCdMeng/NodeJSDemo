@@ -3,7 +3,7 @@
     继续优化 watcher.js 。让其在监听到文件变化后创建子进程。再用子进程执行系统命令
 */
 
-'use strict'
+'use strict';
 const fs = require('fs');
 //引入 node.js 的 child_process 模块。返回该模块下的 spawn 方法。
 const spawn = require('child_process').spawn;
