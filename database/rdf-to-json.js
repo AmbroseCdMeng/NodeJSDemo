@@ -10,3 +10,6 @@ const rdf = fs.readFileSync(process.argv[2]);
 const book = parseRDF(rdf);
 
 console.log(JSON.stringify(book, null, '  '));
+
+
+//node rdf-to-json.js ../data/cache/epub/11/pg11.rdf
