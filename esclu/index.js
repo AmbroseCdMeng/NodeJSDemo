@@ -11,7 +11,7 @@
 const fs = require('fs');
 const request = require('request');
 const program = require('commander');
-const pkg = require('./pachage.json');
+const pkg = require('./package.json');
 
 program.version(pkg.version)
     .description(pkg.description)
