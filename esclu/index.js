@@ -49,6 +49,60 @@ program
     .description('generate the URL for the options and path (default is /)')
     .action((path = '/') => console.log(fullUrl(path)));
 
+
+/**
+ * 使用 Request 模块简化 Http 请求
+ * 
+ * 添加一个 get 命令，接受名为 path 的可选参数。
+ * 在 action 回调，使用 Request 模块提供的 request 方法来执行异步 HTTP 请求，并在完成时调用回调函数
+ */
+program
+    .command('get [path]')
+    .description('perform an HTTP GET request for path (default is /)')
+    .action((path = '/') => {
+        const options = {
+            url: fullUrl(path),
+            json: program.json,
+        };
+        request(options, (err, res, body) => {
+            if (program.json) {
+                console.log(JSON.stringify(err || body));
+            } else {
+                if (err) throw err;
+                console.log(body);
+            }
+        });
+
+
+    });
+
+//接收 HTTP PUT 请求来创建索引
+const handleResponse = (err, res, body) => {
+    if (program.json) {
+        console.log(JSON.stringify(err || body));
+    } else {
+        if (err) throw err;
+        console.log(body);
+    }
+};
+
+program
+    .command('create-index')
+    .description('create an index')
+    .action(() => {
+        //回调中，检查用户是否使用 --index 标志指定索引
+        if (!program.index) {
+            //如果没有，则根据指定的 --json 标志，抛出一个异常或以 JSON 格式输出一个错误
+            const msg = 'No index specified ! User --index <name> ';
+            if (!program.json) throw Error(msg);
+            console.log(JSON.stringify({ error: msg }));
+            return;
+        }
+        //发送 HTTP PUT 请求
+        request.put(fullUrl(), handleResponse);
+    });
+
+
 //确保用户输入无法识别的命令时，调用 help 帮助   
 if (!program.args.filter(arg => typeof arg == 'object').length) {
     program.help();
